@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 function Navbar() {
   const [hovered, setHovered] = useState<"signin" | "register" | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State untuk menu hamburger
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,11 +16,8 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Ripple Effect Function
   const createRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
     const button = event.currentTarget;
-
-    // Hapus ripple sebelumnya
     const existingRipple = button.querySelector(".ripple");
     if (existingRipple) existingRipple.remove();
 
@@ -47,12 +45,53 @@ function Navbar() {
         Jogjadventure<span className="text-white">.</span>
       </Link>
 
+      {/* Tombol Hamburger untuk Mobile */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-white focus:outline-none"
+        >
+          {isOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Menu untuk Desktop */}
       <div className="hidden md:flex gap-6 text-sm text-white">
         <Link to="/" className="cursor-pointer hover:text-secondary transition">
           Home
         </Link>
         <Link
-          to="/destination"
+          to="/destinations"
           className="cursor-pointer hover:text-secondary transition"
         >
           Destinations
@@ -71,8 +110,31 @@ function Navbar() {
         </Link>
       </div>
 
+      {/* Menu Dropdown untuk Mobile */}
+      {isOpen && (
+        <div className="absolute top-16 left-0 w-full bg-white text-black md:hidden">
+          <Link to="/" className="block px-4 py-2 hover:bg-gray-200">
+            Home
+          </Link>
+          <Link
+            to="/destinations"
+            className="block px-4 py-2 hover:bg-gray-200"
+          >
+            Destinations
+          </Link>
+          <Link to="/about" className="block px-4 py-2 hover:bg-gray-200">
+            About
+          </Link>
+          <Link
+            to="/faq"
+            className="block px-4 py-2 hover:bg-gray-200"
+          >
+            FAQ & Bantuan
+          </Link>
+        </div>
+      )}
+
       <div className="flex gap-4 items-center relative w-[200px] h-9">
-        {/* Animated Background */}
         <div
           className={`absolute h-full w-[90px] rounded-md transition-all duration-500 ease-in-out z-0 bg-secondary`}
           style={{
@@ -80,7 +142,6 @@ function Navbar() {
               hovered === "register" ? "translateX(106px)" : "translateX(0px)",
           }}
         />
-        {/* Sign in Button */}
         <Link
           to="/AuthForm?mode=signin"
           className="relative z-10 w-[90px] h-full"
@@ -94,7 +155,6 @@ function Navbar() {
             Sign in
           </button>
         </Link>
-        {/* Sign up Button */}
         <Link
           to="/AuthForm?mode=signup"
           className="relative z-10 w-[90px] h-full"

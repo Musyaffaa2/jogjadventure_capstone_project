@@ -446,7 +446,7 @@ const Rekomendasi = () => {
                     variants={itemVariants}
                     className="mt-8 flex justify-center lg:justify-start"
                   >
-                    <Link to="/destinations">
+                    <Link to="/destination">
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

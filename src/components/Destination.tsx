@@ -66,7 +66,7 @@ function DestinationApp() {
   const [isFromRecommendation, setIsFromRecommendation] = useState(false);
   const [originalSearchQuery, setOriginalSearchQuery] = useState("");
 
-  const destinations: Destination[] = [
+  const destination: Destination[] = [
     {
       id: 1,
       name: "Candi Borobudur",
@@ -316,76 +316,13 @@ function DestinationApp() {
     { id: "heritage", name: "Heritage", icon: "🏛️" },
     { id: "nature", name: "Alam", icon: "🌿" },
     { id: "culture", name: "Budaya", icon: "🎭" },
-    { id: "adventure", name: "Petualangan", icon: "⛰️" },
+    { id: "adventure", name: "Petualangan", icon: "⛰️" }
   ];
 
-  // Handle data dari Hero component (rekomendasi ML)
-  useEffect(() => {
-    if (location.state) {
-      const {
-        recommendations,
-        searchQuery,
-        isFromRecommendation: fromRec,
-      } = location.state;
-      if (fromRec && recommendations) {
-        setRecommendationResults(recommendations);
-        setIsFromRecommendation(true);
-        setOriginalSearchQuery(searchQuery || "");
-        setSearchTerm(""); // Clear search term untuk menampilkan semua hasil rekomendasi
-      }
-    }
-  }, [location.state]);
-
-  // Function to convert recommendation to destination format
-  const convertRecommendationToDestination = (
-    rec: Recommendation
-  ): Destination => {
-    return {
-      id: rec.Place_Id,
-      name: rec.Place_Name,
-      description:
-        rec.Description.length > 150
-          ? `${rec.Description.substring(0, 150)}...`
-          : rec.Description,
-      detailedDescription: rec.Description,
-      location: rec.City,
-      rating: rec.Rating,
-      duration: "2-3 jam", // Default value
-      image: `https://picsum.photos/400/300?random=${rec.Place_Id}`,
-      category: rec.Category.toLowerCase(),
-      price: `Rp ${rec.Price.toLocaleString("id-ID")}`,
-      gallery: [
-        `https://picsum.photos/600/400?random=${rec.Place_Id}1`,
-        `https://picsum.photos/600/400?random=${rec.Place_Id}2`,
-        `https://picsum.photos/600/400?random=${rec.Place_Id}3`,
-        `https://picsum.photos/600/400?random=${rec.Place_Id}4`,
-      ],
-      facilities: ["Toilet", "Parkir", "Mushola", "Souvenir shop"],
-      activities: ["Wisata foto", "Jelajah lokasi", "Edukasi"],
-      openingHours: "08:00 - 17:00 WIB",
-      contact: "+62 274 000000",
-      bestTime: "Pagi hingga sore hari",
-      capacity: "100 orang/hari",
-      tips: [
-        "Datang pagi untuk menghindari keramaian",
-        "Bawa kamera untuk foto",
-        "Pakai pakaian yang nyaman",
-      ],
-      coordinates: { lat: rec.Latitude, lng: rec.Longitude },
-    };
-  };
-
-  // Determine which destinations to show
-  const displayDestinations = isFromRecommendation
-    ? recommendationResults.map(convertRecommendationToDestination)
-    : destinations;
-
-  const filteredDestinations = displayDestinations.filter((dest) => {
-    const matchesSearch =
-      dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dest.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || dest.category === selectedCategory;
+  const filteredDestinations = destinations.filter(dest => {
+    const matchesSearch = dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         dest.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || dest.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -497,13 +434,10 @@ function DestinationApp() {
           </div>
         </div>
 
-        {/* Destinations Grid */}
+        {/* Destination Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredDestinations.map((destination) => (
-            <div
-              key={destination.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105"
-            >
+          {filteredDestinations.map(destination => (
+            <div key={destination.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
                   src={destination.image}
@@ -562,7 +496,7 @@ function DestinationApp() {
         </div>
 
         {/* No Results */}
-        {filteredDestinations.length === 0 && (
+        {filteredDestination.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-semibold text-gray-600 mb-2">

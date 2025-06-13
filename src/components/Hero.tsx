@@ -1,21 +1,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Destination from "./DestinationPopular";
-import Testimonial from "./Testimonial";
-import Explore from "./Jelajah";
+import Destination from './DestinationPopular';
+import Testimonial from './Testimonial';
+import Explore from './Jelajah';
 import Footer from "./Footer";
 import Rekomendasi from "./Rekomendasi";
 
-// Definisikan tipe data untuk rekomendasi
-interface Recommendation {
-  Place_Name: string;
-  Description: string;
-  Category: string;
-  Price: number;
-  Rating: number;
-  City: string;
-}
 
 function Hero() {
   const navigate = useNavigate();
@@ -26,10 +16,6 @@ function Hero() {
   const [isWaitingToSearch, setIsWaitingToSearch] = useState(false);
   const fullText = "Search beautiful places...";
 
-  // Debounce timer untuk pencarian otomatis
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
-    null
-  );
 
   // Typing effect for placeholder
   useEffect(() => {
@@ -260,9 +246,9 @@ function Hero() {
           </motion.p>
         </div>
       </div>
-
+      
       <Destination />
-      <Rekomendasi />
+      <Rekomendasi/>
 
       {/* Recent Searches */}
       {recentSearches.length > 0 && (
@@ -288,8 +274,8 @@ function Hero() {
           </div>
         </section>
       )}
-
-      <Testimonial />
+      
+      <Testimonial/>
       <Explore />
       <Footer />
     </>
