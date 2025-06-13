@@ -220,8 +220,8 @@ const AuthForm = () => {
             className={`absolute right-0 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
             ${
               isActive
-                ? "-translate-x-0 max-sm:-translate-y-4 max-sm:rounded-b-[100px] max-sm:top-0 rounded-r-[100px]"
-                : "translate-x-full max-sm:translate-y-0 max-sm:translate-x-0 max-sm:rounded-t-[100px] rounded-l-[100px]"
+                ? "-translate-x-0 max-sm:-translate-y-4 max-sm:rounded-b-[100px] max-sm:rounded-r-none max-sm:top-0 rounded-r-[100px]"
+                : "translate-x-full max-sm:translate-y-0 max-sm:translate-x-0 max-sm:rounded-t-[100px] max-sm:rounded-b-none rounded-l-[100px]"
             } max-sm:h-[30%] max-sm:bottom-0 max-sm:w-full left-0`}
           >
             <div>

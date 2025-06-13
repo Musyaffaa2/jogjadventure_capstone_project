@@ -2,36 +2,55 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const { testConnection } = require("./config/database");
 
 const app = express();
 
 // Middleware
-app.use(cors()); // Mengizinkan cross-origin requests
-app.use(express.json({ extended: false })); // Mem-parsing body request sebagai JSON
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/auth", require("./routes/auth"));
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch((err) => console.error('❌ MongoDB connection error:', err));
 
-app.use("/api/destinations", require("./routes/destinations"));
+// Routes
+app.use('/api/destinations', destinationRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/auth', authRoutes);
 
-// Welcome route
-app.get("/", (req, res) => {
-  res.send("Selamat datang di Jogjadventure API");
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Tourism API is running!' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
 });
 
 const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
-// Test koneksi database saat server start
-const startServer = async () => {
-  try {
-    await testConnection();
-    app.listen(PORT, () =>
-      console.log(`🚀 Server backend berjalan di http://localhost:${PORT}`)
-    );
-  } catch (error) {
-    console.error("❌ Gagal memulai server:", error.message);
-    process.exit(1);
-  }
-};
-
-startServer();
+app.listen(PORT, () =>
+  console.log(`🚀 Server backend berjalan di http://localhost:${PORT}`)
+);
