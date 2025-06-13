@@ -1,7 +1,17 @@
 // server.js
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Import routes
+const destinationRoutes = require('./routes/destinations');
+const userRoutes = require('./routes/users');
+const reviewRoutes = require('./routes/reviews');
+const authRoutes = require('./routes/auth');
+
+dotenv.config();
 
 const app = express();
 
@@ -51,6 +61,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server backend berjalan di http://localhost:${PORT}`)
-);
+module.exports = app;
