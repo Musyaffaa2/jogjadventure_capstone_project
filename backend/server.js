@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const { testConnection } = require("./config/database");
 
 const app = express();
 
@@ -20,6 +21,17 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server backend berjalan di http://localhost:${PORT}`)
-);
+// Test koneksi database saat server start
+const startServer = async () => {
+  try {
+    await testConnection();
+    app.listen(PORT, () =>
+      console.log(`🚀 Server backend berjalan di http://localhost:${PORT}`)
+    );
+  } catch (error) {
+    console.error("❌ Gagal memulai server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
