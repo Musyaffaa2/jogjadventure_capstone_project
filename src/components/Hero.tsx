@@ -1,18 +1,35 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import Destination from './DestinationPopular';
-import Testimonial from './Testimonial';
-import Explore from './Jelajah';
+import { useNavigate } from "react-router-dom";
+import Destination from "./DestinationPopular";
+import Testimonial from "./Testimonial";
+import Explore from "./Jelajah";
 import Footer from "./Footer";
 import Rekomendasi from "./Rekomendasi";
 
+// Definisikan tipe data untuk rekomendasi
+interface Recommendation {
+  Place_Name: string;
+  Description: string;
+  Category: string;
+  Price: number;
+  Rating: number;
+  City: string;
+}
 
 function Hero() {
+  const navigate = useNavigate();
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isWaitingToSearch, setIsWaitingToSearch] = useState(false);
   const fullText = "Search beautiful places...";
 
+  // Debounce timer untuk pencarian otomatis
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   // Typing effect for placeholder
   useEffect(() => {
@@ -27,13 +44,112 @@ function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Cleanup debounce timer saat komponen unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [debounceTimer]);
+
   // Load recent searches from memory (replacing localStorage)
   useEffect(() => {
     // Simulated initial data
     setRecentSearches(["Prambanan", "Borobudur"]);
   }, []);
 
-  const handleClear = () => setSearchValue("");
+  const handleClear = () => {
+    setSearchValue("");
+    setIsWaitingToSearch(false);
+    // Clear debounce timer jika ada
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      setDebounceTimer(null);
+    }
+  };
+
+  // Fungsi untuk menangani perubahan input dengan debounce
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+
+    // Clear timer sebelumnya
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    // Reset waiting state
+    setIsWaitingToSearch(false);
+
+    // Set timer baru untuk pencarian otomatis setelah 1.5 detik
+    if (value.trim().length > 0) {
+      setIsWaitingToSearch(true);
+
+      const timer = setTimeout(() => {
+        const newSearch = value.trim();
+        let updatedSearches = [
+          newSearch,
+          ...recentSearches.filter((term) => term !== newSearch),
+        ];
+
+        // Batasi maksimal 5 pencarian terakhir
+        if (updatedSearches.length > 5)
+          updatedSearches = updatedSearches.slice(0, 5);
+
+        setRecentSearches(updatedSearches);
+        setIsWaitingToSearch(false);
+        getRecommendations(newSearch);
+      }, 1500); // 1.5 detik delay
+
+      setDebounceTimer(timer);
+    }
+  };
+
+  // Fungsi untuk mendapatkan rekomendasi dari API ML dan redirect ke destinations
+  const getRecommendations = async (placeName: string) => {
+    if (!placeName.trim()) {
+      alert("Silakan masukkan nama tempat wisata.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Kirim request ke backend Flask
+      const response = await fetch("http://127.0.0.1:5000/recommend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ place_name: placeName }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Terjadi kesalahan pada server.");
+      }
+
+      const data: Recommendation[] = await response.json();
+
+      // Redirect ke halaman destinations dengan membawa data rekomendasi
+      navigate("/destinations", {
+        state: {
+          recommendations: data,
+          searchQuery: placeName,
+          isFromRecommendation: true,
+        },
+      });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(`Error: ${err.message}`);
+      } else {
+        alert("Terjadi kesalahan yang tidak diketahui.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchValue.trim() !== "") {
@@ -48,6 +164,9 @@ function Hero() {
         updatedSearches = updatedSearches.slice(0, 5);
 
       setRecentSearches(updatedSearches);
+
+      // Panggil fungsi rekomendasi ML
+      getRecommendations(newSearch);
       setSearchValue("");
     }
   };
@@ -69,7 +188,7 @@ function Hero() {
           >
             <input
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder={placeholderText}
               className="shadow-lg border border-gray-300 px-5 pr-12 py-3 rounded-full w-full transition-all duration-300 outline-none text-black bg-white placeholder-gray-400 focus:ring-2 focus:ring-secondary hover:shadow-xl"
@@ -103,6 +222,20 @@ function Hero() {
                 />
               )}
             </svg>
+
+            {/* Loading/Waiting indicators */}
+            {isLoading && (
+              <div className="absolute top-3.5 right-12 flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            {isWaitingToSearch && !isLoading && (
+              <div className="absolute top-3.5 right-12 flex items-center gap-2">
+                <div className="w-5 h-5 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            )}
           </motion.div>
 
           {/* Title */}
@@ -127,9 +260,9 @@ function Hero() {
           </motion.p>
         </div>
       </div>
-      
+
       <Destination />
-      <Rekomendasi/>
+      <Rekomendasi />
 
       {/* Recent Searches */}
       {recentSearches.length > 0 && (
@@ -142,18 +275,21 @@ function Hero() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             {recentSearches.map((term, i) => (
-              <button
+              <motion.button
                 key={i}
-                className="px-4 py-2 cursor-pointer bg-white shadow rounded-full border hover:bg-gray-200 text-sm"
+                onClick={() => getRecommendations(term)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 cursor-pointer bg-white shadow rounded-full border hover:bg-gray-200 text-sm transition-all duration-300 hover:shadow-md"
               >
                 {term}
-              </button>
+              </motion.button>
             ))}
           </div>
         </section>
       )}
-      
-      <Testimonial/>
+
+      <Testimonial />
       <Explore />
       <Footer />
     </>

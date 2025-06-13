@@ -5,9 +5,6 @@ from flask_cors import CORS
 import tensorflow as tf
 from sklearn.metrics.pairwise import cosine_similarity
 import joblib
-from google import genai
-from google.genai import types
-import os
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
@@ -69,9 +66,9 @@ def recommend():
         
         # Siapkan hasil rekomendasi
         recommendations = df.iloc[similar_indices]
-        
+
         # Ubah ke format JSON dan kembalikan
-        return recommendations.to_json(orient='records')
+        return jsonify(recommendations.to_dict('records'))
 
     except IndexError:
         return jsonify({'error': f'Tempat wisata "{place_name}" tidak ditemukan'}), 404
