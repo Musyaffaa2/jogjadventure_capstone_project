@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Search, MapPin, Star, Clock, Camera, ArrowLeft, Phone, Globe, Calendar, Users, Wallet, Navigation, Loader2, AlertCircle } from "lucide-react";
@@ -24,7 +25,14 @@ interface Destination {
   detailedDescription: string;
   tips: string[];
   coordinates: { lat: number; lng: number };
-  reviews?: any[];
+  reviews?: {
+    id: string;
+    userId: string;
+    userName: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }[];
 }
 
 interface ApiResponse {
@@ -177,6 +185,10 @@ function DestinationApp() {
 
   const handleViewDetail = (destination: Destination) => {
     fetchDestinationDetails(destination.id);
+    // Add scroll to top
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   const handleBackToList = () => {

@@ -130,6 +130,14 @@ const Rekomendasi = () => {
 
   const currentContent = tabContent[activeTab];
 
+  // First, add a function to handle the click and scrolling
+  const handleImageClick = (label: string) => {
+    // Small delay to ensure navigation completes before scrolling
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <section 
       id="rekomendasi" 
@@ -253,14 +261,19 @@ const Rekomendasi = () => {
                     }}
                     className="group relative"
                   >
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl bg-gradient-to-br from-white to-gray-100 p-1">
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        className="w-full h-full object-cover rounded-lg lg:rounded-xl"
-                        loading="lazy"
-                      />
-                    </div>
+                    <Link 
+                      to={`/destination?search=${encodeURIComponent(image.label.split(' ')[0])}`}
+                      onClick={() => handleImageClick(image.label)}
+                    >
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl bg-gradient-to-br from-white to-gray-100 p-1">
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover rounded-lg lg:rounded-xl"
+                          loading="lazy"
+                        />
+                      </div>
+                    </Link>
                     
                     {/* Enhanced Tooltip */}
                     <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none shadow-lg">

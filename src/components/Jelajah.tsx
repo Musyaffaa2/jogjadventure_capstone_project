@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +9,13 @@ interface ExploreProps {
 
 function Explore({ className = '', destinationPath = '/destination' }: ExploreProps) {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+
+  const handleDestinationClick = () => {
+    // Small delay to ensure navigation completes before scrolling
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
 
   return (
     <section className={`relative bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 py-12 px-4 sm:px-6 lg:px-8 ${className}`}>
@@ -44,6 +52,7 @@ function Explore({ className = '', destinationPath = '/destination' }: ExplorePr
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
               aria-label="Explore destinations in Jogja"
+              onClick={handleDestinationClick}
               // Optional: Preload route untuk performance
               onMouseOver={(e) => e.currentTarget.focus()}
             >
