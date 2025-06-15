@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+
 
 type TabName = "Rekomendasi" | "Rating" | "Sering Dikunjungi";
 
@@ -38,7 +38,7 @@ const Rekomendasi = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -50,19 +50,7 @@ const Rekomendasi = () => {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Floating animation for gallery images
-  const floatingVariants = {
-    animate: {
-      y: [0, -8, 0],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -233,13 +221,16 @@ const Rekomendasi = () => {
                 {currentContent.galleryImages.map((image, index) => (
                   <motion.div
                     key={index}
-                    variants={{
-                      ...imageVariants,
-                      ...floatingVariants,
-                    }}
-                    animate={{
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1,
                       y: [0, -6 + (index * 2), 0],
-                      transition: {
+                    }}
+                    transition={{
+                      opacity: { duration: 0.6, ease: "easeOut" },
+                      scale: { duration: 0.6, ease: "easeOut" },
+                      y: {
                         duration: 3 + (index * 0.5),
                         repeat: Infinity,
                         ease: "easeInOut",
@@ -276,7 +267,7 @@ const Rekomendasi = () => {
                 variants={itemVariants}
                 className="mt-8 flex justify-center lg:justify-start"
               >
-                <Link to="/destination">
+                <a href="/destination">
                   <motion.button
                     whileHover={{ 
                       scale: 1.05,
@@ -302,7 +293,7 @@ const Rekomendasi = () => {
                       />
                     </motion.svg>
                   </motion.button>
-                </Link>
+                </a>
               </motion.div>
             </motion.div>
 

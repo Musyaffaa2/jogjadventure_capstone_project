@@ -12,12 +12,14 @@ function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  
   interface Suggestion {
     name: string;
     image?: string;
     location?: string;
     category?: string;
   }
+  
   const [searchSuggestions, setSearchSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +48,7 @@ function Hero() {
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 120,
         damping: 12,
         delay: 0.3
@@ -65,7 +67,7 @@ function Hero() {
       y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 25,
       },
@@ -91,7 +93,7 @@ function Hero() {
       scale: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 150,
         damping: 15,
       },
@@ -100,7 +102,7 @@ function Hero() {
       scale: 1.05,
       y: -2,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -232,13 +234,13 @@ function Hero() {
               key={i}
               className="absolute w-2 h-2 bg-white/20 rounded-full"
               initial={{ 
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
+                x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : Math.random() * 1200,
+                y: typeof window !== 'undefined' ? Math.random() * window.innerHeight : Math.random() * 800,
                 opacity: 0
               }}
               animate={{
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
+                x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : Math.random() * 1200,
+                y: typeof window !== 'undefined' ? Math.random() * window.innerHeight : Math.random() * 800,
                 opacity: [0, 1, 0],
               }}
               transition={{
@@ -271,7 +273,7 @@ function Hero() {
                 name="search"
                 type="text"
                 whileFocus={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                transition={{ type: "spring" as const, stiffness: 300, damping: 25 }}
               />
               <motion.svg
                 onClick={searchValue ? handleClear : undefined}
@@ -340,11 +342,16 @@ function Hero() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                         whileHover={{ 
-                          backgroundColor: "rgba(59, 130, 246, 0.05)",
                           x: 5,
                           transition: { duration: 0.2 }
                         }}
                         whileTap={{ scale: 0.98 }}
+                        style={{
+                          backgroundColor: "transparent"
+                        }}
+                        onHoverStart={() => {
+                          // Handle hover start if needed
+                        }}
                       >
                         <div className="flex items-center space-x-3">
                           <motion.div 
@@ -396,7 +403,7 @@ function Hero() {
             transition={{ 
               delay: 0.6, 
               duration: 0.8,
-              type: "spring",
+              type: "spring" as const,
               stiffness: 100,
               damping: 10
             }}
