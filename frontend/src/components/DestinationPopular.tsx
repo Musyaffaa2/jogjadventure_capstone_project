@@ -51,7 +51,7 @@ function DestinationPopular() {
       } catch (err) {
         console.error("Error fetching destinations:", err);
         setError("Gagal memuat destinasi. Silakan coba lagi.");
-        // Tidak menggunakan fallback data dummy
+        
         setDestinations([]);
       } finally {
         setLoading(false);
