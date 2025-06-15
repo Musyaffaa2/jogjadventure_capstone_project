@@ -1,4 +1,3 @@
-// server.js
 require("dotenv").config();
 
 // Baru import modules lainnya
