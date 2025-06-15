@@ -100,7 +100,7 @@ function Testimonial() {
   const currentTestimonials = getCurrentTestimonials();
 
   // Render stars based on rating
-  const renderStars = (rating) => {
+  const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
       <span
         key={index}
@@ -145,8 +145,7 @@ function Testimonial() {
             transition={{
               type: "spring",
               stiffness: 260,
-              damping: 20,
-              duration: 0.6,
+              damping: 20
             }}
             className="grid md:grid-cols-3 gap-8 mb-8"
           >
