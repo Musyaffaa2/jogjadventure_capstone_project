@@ -275,52 +275,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/destinations/:id - OPTIMIZED single destination
-router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    // Cek cache terlebih dahulu
-    const cacheKey = `destination_${id}`;
-    let destination = getCachedData(cacheKey);
-    
-    if (!destination) {
-      // Query dengan populate reviews
-      destination = await Destination.findById(id)
-        .populate({
-          path: "reviews.user_id",
-          select: "username profile.name profile.avatar"
-        })
-        .lean(); // Gunakan lean() untuk performance
-      
-      if (!destination) {
-        return res.status(404).json({ error: "Destination not found" });
-      }
-      
-      // Cache hasil
-      setCachedData(cacheKey, destination);
-    }
-
-    // Increment view count (async, tidak perlu ditunggu)
-    if (!getCachedData(`viewed_${id}`)) {
-      Destination.findByIdAndUpdate(id, { $inc: { view_count: 1 } }).exec();
-      setCachedData(`viewed_${id}`, true);
-    }
-
-    const transformedDestination = {
-      ...transformDestination(destination, true),
-      reviews: destination.reviews || [],
-      view_count: destination.view_count || 0
-    };
-
-    res.json(transformedDestination);
-
-  } catch (error) {
-    console.error("Error fetching destination:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // GET /api/destinations/featured/popular 
 router.get("/featured/popular", async (req, res) => {
   try {
@@ -454,7 +408,7 @@ router.get("/search-suggestions", async (req, res) => {
   }
 });
 
-// GET /api/destinations/nearby/:lat/:lng - OPTIMIZED
+// GET /api/destinations/nearby/:lat/:lng
 router.get("/nearby/:lat/:lng", async (req, res) => {
   try {
     const { lat, lng } = req.params;
@@ -600,7 +554,7 @@ router.get("/nearby/:lat/:lng", async (req, res) => {
   }
 });
 
-// GET /api/destinations/city/:cityName - Get destinations by city
+// GET /api/destinations/city/:cityName
 router.get("/city/:cityName", async (req, res) => {
   try {
     const { cityName } = req.params;
@@ -625,6 +579,52 @@ router.get("/city/:cityName", async (req, res) => {
 
   } catch (error) {
     console.error("Error fetching destinations by city:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/destinations/:id 
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Cek cache terlebih dahulu
+    const cacheKey = `destination_${id}`;
+    let destination = getCachedData(cacheKey);
+    
+    if (!destination) {
+      // Query dengan populate reviews
+      destination = await Destination.findById(id)
+        .populate({
+          path: "reviews.user_id",
+          select: "username profile.name profile.avatar"
+        })
+        .lean(); // Gunakan lean() untuk performance
+      
+      if (!destination) {
+        return res.status(404).json({ error: "Destination not found" });
+      }
+      
+      // Cache hasil
+      setCachedData(cacheKey, destination);
+    }
+
+    // Increment view count (async, tidak perlu ditunggu)
+    if (!getCachedData(`viewed_${id}`)) {
+      Destination.findByIdAndUpdate(id, { $inc: { view_count: 1 } }).exec();
+      setCachedData(`viewed_${id}`, true);
+    }
+
+    const transformedDestination = {
+      ...transformDestination(destination, true),
+      reviews: destination.reviews || [],
+      view_count: destination.view_count || 0
+    };
+
+    res.json(transformedDestination);
+
+  } catch (error) {
+    console.error("Error fetching destination:", error);
     res.status(500).json({ error: error.message });
   }
 });

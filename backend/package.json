@@ -14,16 +14,18 @@
     "check:simple": "node utils/simpleCheck.js"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.41.0",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.6.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.3.1",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.0",
+    "mongoose": "^8.15.2",
     "multer": "^2.0.1"
   },
   "devDependencies": {

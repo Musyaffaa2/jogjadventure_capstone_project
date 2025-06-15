@@ -1,6 +1,4 @@
 // server.js
-
-// Load environment variables PERTAMA KALI
 require("dotenv").config();
 
 // Baru import modules lainnya
@@ -11,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const path = require("path");
+
 
 // Import routes
 const destinationRoutes = require("./routes/destinations");
