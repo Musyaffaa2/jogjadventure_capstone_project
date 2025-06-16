@@ -5,7 +5,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 
 // API Base URL - sesuaikan dengan AuthForm
-const API_BASE_URL = import.meta.env.VITE_BACKEND_BASEURL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const ProfilePage = () => {
     const [user, setUser] = useState<any>(null);

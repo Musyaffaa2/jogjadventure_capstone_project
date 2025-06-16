@@ -17,7 +17,7 @@ import {
 } from "../utils/destinationUtils";
 import { Destination, ApiResponse } from "../types/destination";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_BASEURL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 function DestinationApp() {
   const location = useLocation();
