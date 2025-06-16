@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install",
+  "build": {
+    "env": {
+      "NPM_CONFIG_PLATFORM": "linux",
+      "NPM_CONFIG_ARCH": "x64"
+    }
+  }
+}
