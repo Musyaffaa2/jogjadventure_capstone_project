@@ -8,12 +8,12 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "npx vite",
+    "build": "npx vite build",
+    "preview": "npx vite preview",
     "prebuild": "rm -rf dist && rm -rf node_modules/.cache",
-    "build": "vite build",
     "postbuild": "echo 'Build completed successfully'",
     "lint": "eslint .",
-    "preview": "vite preview",
     "start": "serve -s dist -l $PORT"
   },
   "dependencies": {
