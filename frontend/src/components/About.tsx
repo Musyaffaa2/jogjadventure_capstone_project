@@ -185,7 +185,7 @@ function About() {
         position: "Team Leader & Full-Stack Developer",
         description:
           "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
-        image: "/public/ourteam/musyaffa.jpg",
+        image: "/public/musyaffa.jpg",
         socials: {
           github: "https://github.com/Musyaffaa2/",
           linkedin: "https://www.linkedin.com/in/musyaffa-arwiin",
@@ -197,7 +197,7 @@ function About() {
         position: "Deputy Team Leader & Machine Learning Engineer",
         description:
           "Wakil Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
-        image: "/public/ourteam/raya.jpg",
+        image: "/public/raya.jpg",
         socials: {
           github: "https://github.com/sorayaindahs",
           linkedin: "https://www.linkedin.com/in/sorayaindahs/",
@@ -209,7 +209,7 @@ function About() {
         position: "Machine Learning Engineer",
         description:
           "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-        image: "/public/ourteam/aula.png",
+        image: "/public/aula.png",
         socials: {
           github: "https://github.com/AulaaMustika36",
           linkedin: "https://www.linkedin.com/in/aulaa-mustika-228363248/",
@@ -222,7 +222,7 @@ function About() {
         position: "Machine Learning Engineer",
         description:
           "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-        image: "/public/ourteam/optra.png",
+        image: "/public/optra.png",
         socials: {
           github: "https://github.com/Optra123",
           linkedin: "https://www.linkedin.com/in/optra-dananjaya/",
@@ -233,7 +233,7 @@ function About() {
         name: "Nanda Nur Aziyah",
         position: "Front-End Developer",
         description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
-        image: "/public/ourteam/nan.png",
+        image: "/public/nan.png",
         socials: {
           github: "https://github.com/aziyah-pixel",
           linkedin: "https://www.linkedin.com/in/nanda-aziyah-76a8b9346/",
@@ -242,10 +242,10 @@ function About() {
       },
       {
         name: "Moh. Musayffak",
-        position: " Back-End Developer & User Interface Designer",
+        position: "User Interface Designer",
         description:
           "Back-End Developer yang berfokus pada pengembangan API dan integrasi sistem",
-        image: "/public/ourteam/safak.jpg",
+        image: "/public/safak.jpg",
         socials: {
           github: "https://github.com/msyfk",
           linkedin: "https://www.linkedin.com/in/moh-musyaffak-42a3232a9",
