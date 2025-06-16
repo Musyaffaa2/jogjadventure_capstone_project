@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm ci && npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm ci --include=optional",
+  "build": {
+    "env": {
+      "NPM_CONFIG_PLATFORM": "linux",
+      "NPM_CONFIG_ARCH": "x64",
+      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "FORCE_COLOR": "0"
+    }
+  }
+}
