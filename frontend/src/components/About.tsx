@@ -185,7 +185,7 @@ function About() {
         position: "Team Leader & Full-Stack Developer",
         description:
           "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
-        image: "/musyaffa.jpg", // Fixed path
+        image: "/musyaffa.JPG", // Fixed path
         socials: {
           github: "https://github.com/Musyaffaa2/",
           linkedin: "https://www.linkedin.com/in/musyaffa-arwiin",
