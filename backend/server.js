@@ -9,7 +9,6 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const path = require("path");
 
-
 // Import routes
 const destinationRoutes = require("./routes/destinations");
 const authRoutes = require("./routes/auth");
@@ -29,44 +28,48 @@ if (missingEnvVars.length > 0) {
 
 const app = express();
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Daftar domain yang diizinkan
-      const allowedOrigins = [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:3001",
-        process.env.FRONTEND_URL,
-        process.env.ADMIN_URL,
-        // Tambahkan domain Render Anda nanti
-        "https://your-app-name.onrender.com", // Ganti dengan nama app Anda
-      ].filter(Boolean);
+// PERBAIKAN 1: Konfigurasi CORS yang benar
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:3001",
+  process.env.FRONTEND_URL,
+  process.env.ADMIN_URL,
+  // PERBAIKAN: Hilangkan trailing slash
+  "https://tourism-backend-production-83a3.up.railway.app"
+].filter(Boolean);
 
-      // Izinkan requests tanpa origin (mobile apps, Postman, dll) di development
-      if (!origin && process.env.NODE_ENV === "development") {
-        return callback(null, true);
-      }
+app.use(cors({
+  origin: function (origin, callback) {
+    // PERBAIKAN: Logging untuk debugging
+    console.log('CORS Check - Origin:', origin);
+    console.log('CORS Check - Allowed Origins:', allowedOrigins);
+    
+    // Izinkan requests tanpa origin (mobile apps, Postman, dll) di development
+    if (!origin && process.env.NODE_ENV === "development") {
+      return callback(null, true);
+    }
 
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Penting untuk cookies
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log('CORS - Origin allowed:', origin);
+      callback(null, true);
+    } else {
+      console.log('CORS - Origin NOT allowed:', origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-// Trust proxy jika menggunakan reverse proxy (Nginx, load balancer, dll)
+// Trust proxy jika menggunakan reverse proxy
 app.set("trust proxy", 1);
 
 // Security Middleware
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false, // Disable jika ada masalah dengan embedding
+    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
@@ -80,8 +83,8 @@ app.use(
 
 // Rate Limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 100, // Maksimal 100 requests per IP per window
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: {
     success: false,
     error: "Terlalu banyak request, coba lagi dalam 15 menit",
@@ -90,10 +93,9 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Rate limiting khusus untuk auth endpoints
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 5, // Maksimal 5 attempts per IP per window
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: {
     success: false,
     error: "Terlalu banyak percobaan login, coba lagi dalam 15 menit",
@@ -107,9 +109,7 @@ app.use("/api", limiter);
 app.use("/api/auth/login", authLimiter);
 app.use("/api/auth/register", authLimiter);
 
-// CORS Configuration
-
-// Cookie Parser (untuk refresh tokens)
+// Cookie Parser
 app.use(cookieParser());
 
 // Body Parser Middleware
@@ -137,20 +137,18 @@ app.use(
   })
 );
 
-// Request logging middleware (untuk development)
-if (process.env.NODE_ENV === "development") {
-  app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${req.method} ${req.path}`);
-    next();
-  });
-}
+// PERBAIKAN 2: Request logging middleware yang lebih baik
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  console.log(`[${timestamp}] ${req.method} ${req.path} - Origin: ${req.get('Origin')}`);
+  next();
+});
 
-// MongoDB Connection dengan retry logic
+// MongoDB Connection
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      // Hapus options deprecated, gunakan yang minimal saja
+      // Minimal options untuk Mongoose 6+
     });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -171,13 +169,16 @@ mongoose.connection.on("reconnected", () => {
 // Connect to database
 connectDB();
 
-// Routes dengan prefix yang konsisten
-app.use("/api/destinations", destinationRoutes);
-// app.use('/api/reviews', reviewRoutes);
+// PERBAIKAN 3: Routes dengan logging
+app.use("/api/destinations", (req, res, next) => {
+  console.log(`Destination route: ${req.method} ${req.path}`);
+  next();
+}, destinationRoutes);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 
-// Health check dengan informasi lebih lengkap
+// Health check
 app.get("/api/health", (req, res) => {
   const healthcheck = {
     uptime: process.uptime(),
@@ -185,14 +186,19 @@ app.get("/api/health", (req, res) => {
     timestamp: Date.now(),
     status: "OK",
     environment: process.env.NODE_ENV,
-    database:
-      mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+    database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+    availableRoutes: [
+      "/api/destinations",
+      "/api/auth", 
+      "/api/profile",
+      "/api/health"
+    ]
   };
 
   res.json(healthcheck);
 });
 
-// API Documentation endpoint (opsional)
+// API Documentation endpoint
 app.get("/api", (req, res) => {
   res.json({
     message: "Jogja Adventure Tourism API",
@@ -204,6 +210,17 @@ app.get("/api", (req, res) => {
       health: "/api/health",
     },
     documentation: "Coming soon...",
+  });
+});
+
+// PERBAIKAN 4: Test route untuk debugging
+app.get("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "API is working!",
+    timestamp: new Date().toISOString(),
+    origin: req.get('Origin'),
+    headers: req.headers
   });
 });
 
@@ -247,6 +264,8 @@ app.use((err, req, res, next) => {
     return res.status(403).json({
       success: false,
       error: "CORS: Origin not allowed",
+      origin: req.get('Origin'),
+      allowedOrigins: allowedOrigins
     });
   }
 
@@ -254,19 +273,24 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
     error: "Something went wrong!",
-    message:
-      process.env.NODE_ENV === "development"
-        ? err.message
-        : "Internal server error",
+    message: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
   });
 });
 
-// 404 handler untuk semua routes yang tidak ditemukan
+// 404 handler
 app.use("*", (req, res) => {
+  console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
     success: false,
     error: "Route not found",
     message: `Cannot ${req.method} ${req.originalUrl}`,
+    availableRoutes: [
+      "GET /api/test",
+      "GET /api/health", 
+      "GET /api/destinations",
+      "POST /api/auth/login",
+      "POST /api/auth/register"
+    ]
   });
 });
 
@@ -287,24 +311,15 @@ process.on("SIGINT", () => {
   });
 });
 
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (err, promise) => {
-  console.error("🚨 Unhandled Promise Rejection:", err.message);
-  // Close server & exit process
-  process.exit(1);
-});
-
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log(
-    `🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`
-  );
+  console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+  console.log(`📍 Server URL: ${process.env.NODE_ENV === 'production' ? 'https://tourism-backend-production-83a3.up.railway.app' : `http://localhost:${PORT}`}`);
 });
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
   console.error("🚨 Unhandled Promise Rejection:", err.message);
-  // Close server & exit process
   server.close(() => {
     process.exit(1);
   });
