@@ -8,10 +8,11 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-        "dev": "vite",
+    "dev": "vite",
     "prebuild": "rm -rf dist && rm -rf node_modules/.cache",
     "build": "tsc -b && vite build",
     "postbuild": "echo 'Build completed successfully'",
+    "postinstall": "npm install @rollup/rollup-linux-x64-gnu --save-optional || true",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "serve -s dist -l $PORT"
