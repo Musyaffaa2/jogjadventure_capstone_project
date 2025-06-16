@@ -176,7 +176,7 @@ const AuthForm = () => {
     try {
       console.log("Attempting login with:", { email });
       
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password
       });
@@ -272,7 +272,7 @@ const AuthForm = () => {
     try {
       console.log("Attempting registration with:", { email });
       
-      const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
         email,
         password
       });

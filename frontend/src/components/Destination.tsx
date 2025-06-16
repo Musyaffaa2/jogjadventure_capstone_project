@@ -41,9 +41,9 @@ function DestinationApp() {
 
     if (searchQuery) {
       setSearchTerm(searchQuery);
-      fetchDestinations(1, searchQuery); // Fetch destinations based on the search query
+      fetchDestinations(1, searchQuery); 
     } else {
-      fetchDestinations(); // Fetch all destinations if no search query
+      fetchDestinations(); 
     }
   }, [location.search]);
 
@@ -65,7 +65,7 @@ function DestinationApp() {
         params.append("category", category);
       }
 
-      const response = await fetch(`${API_BASE_URL}/destinations?${params}`);
+      const response = await fetch(`${API_BASE_URL}/api/destinations?${params}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -92,7 +92,7 @@ function DestinationApp() {
   const fetchDestinationDetails = async (id: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/destinations/${id}`);
+      const response = await fetch(`${API_BASE_URL}/api/destinations/${id}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

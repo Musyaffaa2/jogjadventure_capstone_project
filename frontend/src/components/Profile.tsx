@@ -79,7 +79,7 @@ const ProfilePage = () => {
         setIsLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(`${API_BASE_URL}/profile/verify-password`, {
+            const response = await axios.post(`${API_BASE_URL}/api/profile/verify-password`, {
                 password
             }, {
                 headers: {
@@ -107,7 +107,7 @@ const ProfilePage = () => {
     const updatePassword = async (newPassword: string): Promise<boolean> => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put(`${API_BASE_URL}/profile/update-password`, {
+            const response = await axios.put(`${API_BASE_URL}/api/profile/update-password`, {
                 newPassword
             }, {
                 headers: {
@@ -132,7 +132,7 @@ const ProfilePage = () => {
     const updateProfile = async (userData: { username: string; email: string }): Promise<boolean> => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put(`${API_BASE_URL}/profile/update-profile`, userData, {
+            const response = await axios.put(`${API_BASE_URL}/api/profile/update-profile`, userData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

@@ -114,9 +114,8 @@ const transformDestination = (destination, includeGallery = true) => {
   return transformed;
 };
 
-// ========== OPTIMIZED ENDPOINTS ==========
 
-// GET /api/destinations - OPTIMIZED dengan aggregation
+// GET /api/destinations
 router.get("/", async (req, res) => {
   try {
     const {
