@@ -8,10 +8,13 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "vite",
+        "dev": "vite",
+    "prebuild": "rm -rf dist && rm -rf node_modules/.cache",
     "build": "tsc -b && vite build",
+    "postbuild": "echo 'Build completed successfully'",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "serve -s dist -l $PORT"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.5",
@@ -33,6 +36,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.26.1",
+    "serve": "^14.2.4",
     "swiper": "^11.2.8"
   },
   "devDependencies": {
