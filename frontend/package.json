@@ -36,7 +36,8 @@
     "react-router-dom": "^6.26.1",
     "serve": "^14.2.4",
     "swiper": "^11.2.8",
-    "vite": "^5.4.10"
+    "vite": "^5.4.10",
+    "@vitejs/plugin-react": "^4.5.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -45,7 +46,6 @@
     "@types/node": "^24.0.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",

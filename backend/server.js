@@ -28,14 +28,12 @@ if (missingEnvVars.length > 0) {
 
 const app = express();
 
-// PERBAIKAN 1: Konfigurasi CORS yang benar
+// Konfigurasi CORS yang benar
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:3001",
   process.env.FRONTEND_URL,
-  process.env.ADMIN_URL,
-  // PERBAIKAN: Hilangkan trailing slash
   "https://tourism-backend-production-83a3.up.railway.app"
 ].filter(Boolean);
 

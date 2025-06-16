@@ -1,4 +1,4 @@
-// utils/destinationUtils.ts
+
 import { Destination, Category } from '../types/destination';
 
 export const normalizeDestination = (dest: any): Destination => {

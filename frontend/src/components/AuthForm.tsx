@@ -5,7 +5,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import "../index.css";
 
-// API Base URL
+
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // Props type for InputField component
