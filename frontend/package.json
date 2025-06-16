@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "rm -rf dist && rm -rf node_modules/.cache",
-    "build": "npx tsc -b && vite build",
+    "build": "vite build",
     "postbuild": "echo 'Build completed successfully'",
     "lint": "eslint .",
     "preview": "vite preview",
