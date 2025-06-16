@@ -65,7 +65,7 @@ function DestinationApp() {
         params.append("category", category);
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/destinations?${params}`);
+      const response = await fetch(`${API_BASE_URL}api/destinations?${params}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -92,7 +92,7 @@ function DestinationApp() {
   const fetchDestinationDetails = async (id: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/destinations/${id}`);
+      const response = await fetch(`${API_BASE_URL}api/destinations/${id}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -92,7 +92,7 @@ export class DestinationApiService {
       }
 
       
-      const url = `${API_BASE_URL}/api/destinations?${params}`;
+      const url = `${API_BASE_URL}api/destinations?${params}`;
       const response = await this.fetchWithTimeout(url);
       return await this.handleResponse(response);
     } catch (error) {
@@ -103,7 +103,7 @@ export class DestinationApiService {
 
   static async fetchDestinationById(id: string): Promise<Destination> {
     try {
-      const url = `${API_BASE_URL}/api/destinations/${id}`;
+      const url = `${API_BASE_URL}api/destinations/${id}`;
       const response = await this.fetchWithTimeout(url);
       return await this.handleResponse(response);
     } catch (error) {
@@ -114,7 +114,7 @@ export class DestinationApiService {
 
   static async fetchCategories(): Promise<string[]> {
     try {
-      const url = `${API_BASE_URL}/api/destinations/meta/categories`;
+      const url = `${API_BASE_URL}api/destinations/meta/categories`;
       const response = await this.fetchWithTimeout(url);
       return await this.handleResponse(response);
     } catch (error) {
@@ -132,7 +132,7 @@ export class DestinationApiService {
       });
 
       // ✅ FIX: Menambahkan /api prefix
-      const url = `${API_BASE_URL}/api/destinations?${params}`;
+      const url = `${API_BASE_URL}api/destinations?${params}`;
       const response = await this.fetchWithTimeout(url);
       const data: ApiResponse = await this.handleResponse(response);
       return data.destinations || [];
@@ -152,7 +152,7 @@ export class DestinationApiService {
       }
 
       // ✅ FIX: Menambahkan /api prefix - INI YANG PALING PENTING!
-      const url = `${API_BASE_URL}/api/destinations/featured/popular`;
+      const url = `${API_BASE_URL}api/destinations/featured/popular`;
       const response = await this.fetchWithTimeout(url);
       const data = await this.handleResponse(response);
       
@@ -294,7 +294,7 @@ export class DestinationApiService {
       }
 
       // ✅ FIX: Menambahkan /api prefix
-      const response = await this.fetchWithTimeout(`${API_BASE_URL}/api/health`, 5000);
+      const response = await this.fetchWithTimeout(`${API_BASE_URL}api/health`, 5000);
       return {
         status: response.status,
         ok: response.ok,
