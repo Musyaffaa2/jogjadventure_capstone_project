@@ -5,9 +5,60 @@
     <link rel="icon" type="image" href="/public/icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jogjadventure</title>
+    <link rel="stylesheet"
+  href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css"/>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js">
+  </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <df-messenger
+  project-id="round-cathode-461707-m5"
+  agent-id="24c2077c-76e4-4e98-bde0-cefd5b6e642f"
+  language-code="en"
+  max-query-length="-1"
+>
+  <df-messenger-chat-bubble
+    chat-title="Jogjadventure Chatbot"
+  ></df-messenger-chat-bubble>
+</df-messenger>
+
+<df-messenger
+  project-id="round-cathode-461707-m5"
+  agent-id="24c2077c-76e4-4e98-bde0-cefd5b6e642f"
+  language-code="en"
+  max-query-length="-1"
+>
+  <df-messenger-chat-bubble
+    chat-title="Jogjadventure Chatbot"
+  ></df-messenger-chat-bubble>
+</df-messenger>
+<style>
+  df-messenger {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 999;
+    --df-messenger-font-color: #1b2730;
+    --df-messenger-font-family: 'Poppins', sans-serif;
+    --df-messenger-chat-background: #fdf6e3;
+    --df-messenger-message-user-background: #ff6f00;
+    --df-messenger-message-bot-background: #ffffff;
+    --df-messenger-button-titlebar-color: #ff6f00;
+    --df-messenger-button-titlebar-font-color: #fff;
+  }
+  df-messenger-chat-bubble {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+  }
+  df-messenger-chat-bubble:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.2s;
+  }
+</style>
+
   </body>
 </html>
