@@ -181,7 +181,7 @@ const Footer = () => {
       {/* Bottom Copyright */}
       <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-gray-600 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-          <p className="hover:text-gray-300 transition-colors duration-300">&copy; 2024 Jogjadventure. All rights reserved.</p>
+          <p className="hover:text-gray-300 transition-colors duration-300">&copy; 2025 Jogjadventure. All rights reserved.</p>
           <p className="mt-2 md:mt-0 hover:text-gray-300 transition-colors duration-300 group">
             Made with <span className="text-red-400 group-hover:animate-pulse group-hover:scale-125 inline-block transition-transform duration-300">❤️</span> for Yogyakarta Tourism
           </p>
