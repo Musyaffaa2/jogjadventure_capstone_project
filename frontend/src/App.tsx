@@ -6,7 +6,6 @@ import Destination from './components/Destination';
 import DestinationDetailPage from './components/DestinationDetailPage';
 import About from './components/About';
 import FAQ from './components/FAQ';
-import Chatbot from './components/Chatbot';
 import ProfilePage from './components/Profile';
 import DestinationListPage from './components/DestinationListPage'; // Ganti import
 
@@ -32,7 +31,6 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-      <Chatbot />
     </>
   );
 }
